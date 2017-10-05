@@ -5,15 +5,16 @@ using UnityEngine.AI;
 
 public class moveRandomly : MonoBehaviour
 {
-    NavMeshAgent nav;
+    public NavMeshAgent nav;
     public float timer;
     bool inCoRoutine;
-    Vector3 target;
+    public Vector3 target;
     NavMeshPath path;
     bool validPath;
     // Use this for initialization
     void Start()
     {
+        Debug.Log("inicio ESTA MADRE: " + this.name);
         nav = gameObject.GetComponent<NavMeshAgent>();
         path = new NavMeshPath();
         getNewPath();
@@ -29,8 +30,8 @@ public class moveRandomly : MonoBehaviour
     }
     Vector3 newPosition()
     {
-        float x = Random.RandomRange(-100, 100);
-        float z = Random.RandomRange(-100, 100);
+        float x = Random.Range(-40, 38);
+        float z = Random.Range(-35, 35);
         Vector3 pos = new Vector3(x, 0, z);
         return pos;
     }
