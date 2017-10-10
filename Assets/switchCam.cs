@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
 public class switchCam : MonoBehaviour
 {
     public Camera[] cams;
     int longitud;
     int start = 0;
+    bool flag = false;
     // Use this for initialization
     void Start()
     {
@@ -34,6 +35,22 @@ public class switchCam : MonoBehaviour
             }
             cams[start].enabled = true;
 
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (flag)
+            {
+                gameObject.GetComponent<NavMeshAgent>().enabled = false;
+                gameObject.GetComponent<CharacterController>().enabled = true;
+                flag = false;
+            }
+            else
+            {
+                gameObject.GetComponent<NavMeshAgent>().enabled = true;
+                gameObject.GetComponent<CharacterController>().enabled = false;
+
+                flag = true;
+            }
         }
     }
 }

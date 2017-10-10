@@ -11,6 +11,7 @@ public class moveRandomly : MonoBehaviour
     public Vector3 target;
     NavMeshPath path;
     bool validPath;
+    bool flag=false;
     // Use this for initialization
     void Start()
     {
@@ -23,6 +24,22 @@ public class moveRandomly : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (this.GetComponent<moveRandomly>().nav.enabled &&
+      this.GetComponent<moveRandomly>().nav.remainingDistance != Mathf.Infinity &&
+          this.GetComponent<moveRandomly>().nav.pathStatus == NavMeshPathStatus.PathComplete &&
+          this.GetComponent<moveRandomly>().nav.remainingDistance == 0 &&
+          !flag)
+        {
+            getNewPath();
+            //      anim.CrossFade("Idle");
+            Debug.Log("ya llegue prro");
+            flag = true;
+        }
+        else
+        {
+            //    anim.CrossFade("Walk");
+            flag = false;
+        }
         if (!inCoRoutine)
         {
             StartCoroutine(DoSomething());
@@ -40,22 +57,28 @@ public class moveRandomly : MonoBehaviour
         inCoRoutine = true;
         yield return new WaitForSeconds(timer);
         getNewPath();
-        validPath = nav.CalculatePath(target, path);
-        if (!validPath)
+        if (nav.enabled)
         {
-            Debug.Log("found an invalid path");
-        }
-        while (!validPath)
-        {
-            yield return new WaitForSeconds(0.01f);
-            getNewPath();
             validPath = nav.CalculatePath(target, path);
+            if (!validPath)
+            {
+                Debug.Log("found an invalid path");
+            }
+            while (!validPath)
+            {
+                yield return new WaitForSeconds(0.01f);
+                getNewPath();
+                validPath = nav.CalculatePath(target, path);
+            }
         }
         inCoRoutine = false;
     }
     void getNewPath()
     {
         target = newPosition();
-        nav.SetDestination(target);
+        if (nav.enabled)
+        {
+            nav.SetDestination(target);
+        }
     }
 }
